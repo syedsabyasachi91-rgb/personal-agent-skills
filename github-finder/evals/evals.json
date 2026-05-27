@@ -1,0 +1,53 @@
+{
+  "skill_name": "github-finder",
+  "evals": [
+    {
+      "id": 1,
+      "name": "Python PDF library search",
+      "prompt": "find me a python library for parsing PDF files on github",
+      "expected_output": "Repository search results with star counts, descriptions, language",
+      "assertions": [
+        "Result includes at least 3 repos",
+        "Each result has star count",
+        "Each result has language label"
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "JS fetch API code search",
+      "prompt": "search github for code examples of using the fetch api with error handling in javascript",
+      "expected_output": "Code search results with snippets, file paths, repo links",
+      "assertions": [
+        "Result includes code snippets with error handling",
+        "Each result links to a GitHub repo",
+        "Code mode detection activates"
+      ],
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "React compiler issues",
+      "prompt": "are there any open issues on facebook/react about the new compiler?",
+      "expected_output": "Issues search results with issue numbers, titles, state, labels",
+      "assertions": [
+        "Result includes issue titles and numbers",
+        "Each result shows open/closed state",
+        "Issues mode detection activates"
+      ],
+      "files": []
+    },
+    {
+      "id": 4,
+      "name": "Trending Rust projects",
+      "prompt": "find me the top trending rust projects on github this month",
+      "expected_output": "Repository search with star counts, language filter, sorted by stars",
+      "assertions": [
+        "Result includes repos with star counts",
+        "Language filter is Rust",
+        "Results sorted by popularity"
+      ],
+      "files": []
+    }
+  ]
+}

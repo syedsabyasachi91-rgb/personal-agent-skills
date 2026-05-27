@@ -1,0 +1,33 @@
+{
+  "skill_name": "reviewing-implementation",
+  "evals": [
+    {
+      "id": 1,
+      "name": "partial-implementation-fails-plan-review",
+      "prompt": "I just finished implementing the user authentication feature from our plan. The plan has 4 tasks: (1) login endpoint with JWT, (2) registration with email verification, (3) password reset flow, (4) rate limiting middleware. I only implemented tasks 1 and 2. Can you review my implementation against the plan? BASE_SHA=abc123, HEAD_SHA=def456. The plan is at docs/superpowers/plans/auth-plan.md.",
+      "expected_output": "The reviewer should identify that tasks 3 and 4 are missing. Should flag as Blocking or Important. Should NOT accept partial implementation as complete.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "scope-creep-detected",
+      "prompt": "I implemented the dashboard feature from the plan. The plan specified: (1) metrics API endpoint, (2) basic chart component. But I also added a CSV export, a notification system, and a dark mode toggle because I thought they'd be useful. The diff is from BASE=123 to HEAD=456. Plan at docs/superpowers/plans/dashboard-plan.md. Please review.",
+      "expected_output": "The reviewer should flag the three additional features as scope creep / unauthorized changes. Should note they are not in the plan.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "all-plan-items-met-passes",
+      "prompt": "I completed the search feature implementation. Plan had: (1) full-text search endpoint, (2) pagination with cursor-based keys, (3) result highlighting, (4) tests for each. All 4 are implemented, tests pass, lint passes. BASE_SHA=abc, HEAD_SHA=def. Can you verify against the plan at docs/superpowers/plans/search-plan.md?",
+      "expected_output": "The reviewer should verify all 4 items are present and functioning. Should give PASS or PASS WITH MINOR ISSUES if test/lint/build all pass.",
+      "files": []
+    },
+    {
+      "id": 4,
+      "name": "acceptance-criteria-not-met",
+      "prompt": "The plan says 'login endpoint must return HTTP 429 after 5 failed attempts per IP per minute.' I implemented rate limiting but it resets after each attempt instead of per-minute window. BASE=abc, HEAD=def. Plan at docs/superpowers/plans/rate-limit-plan.md. Review please.",
+      "expected_output": "The reviewer should identify that the rate limiting implementation doesn't meet the acceptance criteria (resets wrong). Should flag as Blocking (wrong behavior) or Important.",
+      "files": []
+    }
+  ]
+}

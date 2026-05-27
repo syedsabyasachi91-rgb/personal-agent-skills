@@ -1,0 +1,21 @@
+[
+  {"query": "i finished implementing the auth feature can you check if i did everything the plan asked for", "should_trigger": true},
+  {"query": "verify this PR implements all the acceptance criteria from the spec", "should_trigger": true},
+  {"query": "check my diff against the plan document before i commit", "should_trigger": true},
+  {"query": "did I miss anything from the implementation plan?", "should_trigger": true},
+  {"query": "can you review this implementation for plan compliance", "should_trigger": true},
+  {"query": "check if all plan tasks are addressed in the changeset", "should_trigger": true},
+  {"query": "i think i finished everything but can you double check", "should_trigger": true},
+  {"query": "validate the code changes match the requirements doc", "should_trigger": true},
+  {"query": "does this diff satisfy all the tasks in the plan?", "should_trigger": true},
+  {"query": "can you review this function for bugs", "should_trigger": false},
+  {"query": "review my code quality", "should_trigger": false},
+  {"query": "check for security issues in this PR", "should_trigger": false},
+  {"query": "review this code for performance problems", "should_trigger": false},
+  {"query": "what do you think of this code?", "should_trigger": false},
+  {"query": "can you make this code better", "should_trigger": false},
+  {"query": "review my pull request", "should_trigger": false},
+  {"query": "spot any issues with this code", "should_trigger": false},
+  {"query": "is this code well-written?", "should_trigger": false},
+  {"query": "clean up this code for me", "should_trigger": false}
+]
