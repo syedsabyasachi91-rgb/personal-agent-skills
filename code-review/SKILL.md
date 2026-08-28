@@ -1,14 +1,12 @@
 ---
 name: code-review
 description: >
-  Perform focused, in-depth code reviews on specific functions, methods, classes, features, or entire
-  files. Use this skill whenever the user asks to "review", "check", "audit", "critique", "look over",
-  "improve", or "clean up" any piece of code — even if phrased casually: "can you look at this
-  function", "what do you think of this code", "is there anything wrong with this", "how can I improve
-  this", "is this good?", "make this better". Also trigger when a user shares code and asks about bugs,
-  performance, readability, security, edge cases, or best practices — even if they don't use the word
-  "review". If code is shared and any form of feedback, improvement, or evaluation is implied, use this
-  skill immediately. Do NOT wait for the user to say "code review" explicitly.
+  Use when asked to review, audit, critique, inspect, or improve code — including
+  casual requests like "what do you think of this", "is this good", "spot any issues",
+  or "can you look at this snippet". Also use when code is shared and feedback on
+  bugs, security, performance, edge cases, error handling, or quality is requested
+  or implied. Do NOT use for plan compliance (use reviewing-implementation) or receiving
+  external review feedback (use receiving-code-review).
 ---
 
 # Code Review Skill
@@ -22,10 +20,46 @@ Structured skill for reviewing functions, features, or code blocks with targeted
 - User shares a function, method, class, or snippet and asks for feedback
 - User says "review", "audit", "check", "look over", "critique", "improve", "clean up", or "what's wrong with"
 - User asks about bugs, edge cases, performance, security, or readability
-- User shares a PR diff or change and wants it evaluated
+- User shares a PR diff or change and wants code quality evaluated
 - User says "is this good?" or "can this be better?" about their code
 - User pastes code with no explicit request — infer that feedback is desired
 - User asks "does this look right?" or "spot any issues?" or "give me feedback on this"
+
+### When NOT to Use
+
+- **Plan compliance / spec validation:** Use `reviewing-implementation` when verifying whether a diff meets all tasks and acceptance criteria from a plan document.
+- **Handling incoming review comments:** Use `receiving-code-review` when processing review feedback received from an external reviewer on your own changes.
+- **Dead code analysis:** Use `finding-dead-code` when hunting for unused variables, unreachable branches, or dead imports across a repository.
+- **Architecture design / new code:** Use `brainstorming` or `writing-plans` when designing new features or components from scratch.
+
+### Routing Decision Flow
+
+```dot
+digraph review_routing {
+    "Code feedback requested?" [shape=diamond];
+    "Checking diff against plan/spec?" [shape=diamond];
+    "Processing feedback from a reviewer?" [shape=diamond];
+    "Use reviewing-implementation" [shape=box];
+    "Use receiving-code-review" [shape=box];
+    "Use code-review" [shape=box];
+
+    "Code feedback requested?" -> "Checking diff against plan/spec?" [label="yes"];
+    "Checking diff against plan/spec?" -> "Use reviewing-implementation" [label="yes"];
+    "Checking diff against plan/spec?" -> "Processing feedback from a reviewer?" [label="no"];
+    "Processing feedback from a reviewer?" -> "Use receiving-code-review" [label="yes"];
+    "Processing feedback from a reviewer?" -> "Use code-review" [label="no"];
+}
+```
+
+## Red Flags & Anti-Rationalizations
+
+| Rationalization | Reality |
+|---|---|
+| "The user phrased it casually ('looks good?'), so I'll just say LGTM." | Casual phrasing requires the same structured 6-dimension pass. |
+| "It's only a 5-line helper function, no need to check edge cases." | Short helpers frequently harbor injection, mutation, or off-by-one bugs. |
+| "I'll skip 'What's Working Well' to save tokens." | Mandatory section: positive reinforcement prevents regressions in solid logic. |
+| "I'll explain the fix in prose without showing the corrected snippet." | Always provide concrete, copy-pasteable replacement code for non-trivial fixes. |
+| "I'll mix style nitpicks into the critical bug section." | Strict separation: critical correctness/security issues must lead and stay distinct from style suggestions. |
 
 ---
 

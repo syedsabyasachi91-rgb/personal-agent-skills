@@ -74,7 +74,7 @@ Cast a wide net. Do NOT go deep yet.
 - Search from 3+ different angles/phrasings
 - Scan results for breadth: what subtopics exist?
 - Collect 5+ sources (even if some are tangentially relevant)
-- Do not evaluate quality yet — just gather
+- Do not filter for depth of engagement yet — just gather
 
 **Quality gate:** Before exiting, rank each collected source by hierarchy tier. Drop sources below tier 4 if you already have 3+ from tiers 1-3. Note any vendor/source bias.
 
@@ -97,7 +97,9 @@ Cast a wide net. Do NOT go deep yet.
 - **Angle** — approach from a different perspective (practical vs theoretical, beginner vs advanced)
 - **Source type** — move up or down the hierarchy for balance
 
-**Exit:** Original question is answerable AND last 2 iterations found 0 new relevant facts.
+**Safety valve:** if you complete 6+ deepen iterations without triggering the stop rule, surface this to the user rather than continuing indefinitely.
+
+**Exit:** Original question is answerable AND your last 2 deepen iterations each found 0 new facts that materially change the answer or raise new unanswered questions.
 
 ### Phase 4: Synthesize
 
@@ -265,16 +267,35 @@ For each subtopic investigated, repeat this block:
 
 **Exit:** Deliverable matches the format defined in Phase 1.
 
+### Post-Research Step: HTML Generation Prompt
+
+After presenting the final research report to the user:
+1. **Always ask the user** if they would like to generate a beautifully styled, self-contained HTML file of the research findings for offline viewing, presentation, or sharing.
+2. **If the user says YES:**
+   - **REQUIRED SUB-SKILL:** You **MUST** use the **`ui-ux-pro-max`** skill to design and build the HTML file.
+   - Run the `ui-ux-pro-max` design system generation command to choose an appropriate style, color palette, and typography based on the research topic:
+     ```bash
+     python skills/ui-ux-pro-max/scripts/search.py "<research_topic> <keywords>" --design-system
+     ```
+   - Build a highly polished, responsive, and modern HTML5 page using Tailwind CSS (loaded via CDN) that incorporates:
+     - The structured content from the research report (perfectly formatted into visual card layouts, headers, and lists).
+     - Modern typography, color scheme, and container layouts recommended by `ui-ux-pro-max` output.
+     - SVG icons (e.g., Heroicons, Lucide) instead of emojis (strictly following the `ui-ux-pro-max` Common Rules).
+     - Interactivity such as smooth hover states (`transition-all duration-200`) and clear spacing.
+     - Proper semantic structure, dark/light mode optimization, and full responsive layout.
+
 ## Source Hierarchy
 
 | Rank | Source Type | Examples |
 |------|-------------|---------|
 | 1 | Official documentation | MDN, docs.python.org, RFCs |
-| 1a | Peer-reviewed / academic | Papers, journals, IEEE (tier 1 for academic research topics; tier 2 for technical/software research) |
+| 2 | Peer-reviewed / academic | Papers, journals, IEEE |
 | 3 | Authoritative references | O'Reilly books, Wikipedia (starting point) |
 | 4 | Well-maintained tutorials | DigitalOcean, AWS blogs, official examples |
 | 5 | Community knowledge | Stack Overflow, GitHub discussions |
 | 6 | Opinion / anecdotal | Blog posts, Reddit, personal sites |
+
+*Academic/peer-reviewed sources rank as tier 1 for academic research topics, but tier 2 for technical/software research (behind official documentation for that domain).*
 
 **Minimum standard:** 2+ sources from rank 1-3 OR 3+ sources from rank 1-4 before considering a finding "verified."
 
@@ -320,3 +341,7 @@ For each subtopic investigated, repeat this block:
 - Use **Variant B (Explainer)** for "how does X work" questions
 - Use **Variant C (Comparison)** for "X vs Y" questions
 - Use **Variant D (Detailed Research Report)** for comprehensive deep-dives requiring per-subtopic findings, synthesis, and actionable recommendations
+
+### Post-Research Step
+- [ ] Prompt the user: "Would you like a beautifully-designed, self-contained HTML file of this research report?"
+- [ ] If yes, invoke **`ui-ux-pro-max`** to build a modern HTML/Tailwind report following professional design guidelines.

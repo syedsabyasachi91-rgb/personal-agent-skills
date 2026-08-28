@@ -3,74 +3,56 @@ name: web-fetching
 description: >
   Use when you need to retrieve content from the web — fetching specific URLs,
   searching for information, retrieving API documentation, finding code examples,
-  or getting error message solutions. Covers both webfetch and websearch tools.
+  or getting error message solutions.
   Trigger for any request involving URLs, web content, online documentation, or
-  web searches. Do NOT use for local files — use txt-reader for those.
+  web searches.
+  Do NOT use for local files.
+  Only webfetch is available — websearch is NOT available.
 ---
 
 # Web Fetching Skill
 
-Retrieve web content completely and correctly for coding tasks — no guessing,
-no sampling, use the right tool for the right job.
+Retrieve web content for coding tasks — use the right format, handle errors,
+and perform searches via webfetch with search engine URLs.
 
 ---
 
 ## Overview
 
-This skill covers two tools:
-- **webfetch**: Fetch specific URLs (documentation, APIs, code files)
-- **websearch**: Search the web for information (solutions, examples, best practices)
-
-Key principle: Choose the right tool based on whether you know the exact resource.
-
----
-
-## PHASE 1 — Choose the Right Tool
-
-| Signal | Tool |
-|---|---|
-| "fetch this URL", "get content from [url]" | **webfetch** |
-| "look up", "search for", "find how to" | **websearch** |
-| Specific documentation page, API endpoint, file | **webfetch** |
-| Error message, "how do I", "what's the best way" | **websearch** |
-| Know the exact URL | **webfetch** |
-| Don't know the URL, need to find it | **websearch** |
-
-When ambiguous, ask: *"Do you have a specific URL, or should I search for it?"*
-
----
-
-## PHASE 2 — Using webfetch
-
-### 2.1 Validate the URL
-
-Before fetching, verify:
-- URL is well-formed (https://, proper path)
-- URL points to the exact resource needed
-- URL is accessible (not behind authentication without credentials)
-
-### 2.2 Fetch with Format Options
+The only web tool available is **webfetch**. There is no separate websearch tool.
+To perform web searches, use webfetch with a search engine URL.
 
 ```python
 webfetch(url="https://example.com/docs/api", format="markdown")
 ```
 
+| Parameter | Type | Description |
+|---|---|---|
+| `url` | string | Target URL (required) |
+| `format` | string | `"markdown"` (default), `"text"`, or `"html"` |
+| `timeout` | number | Optional timeout in seconds |
+
+---
+
+## PHASE 1 — Fetching Content
+
+### 1.1 Validate the URL
+
+- URL is well-formed (https://, proper path)
+- URL points to the exact resource needed
+- URL is accessible (not behind authentication without credentials)
+
+### 1.2 Choose Format
+
 | Format | Best For |
 |---|---|
 | `markdown` | Documentation, articles, README files (default) |
-| `text` | Raw text, code snippets, log content |
+| `text` | Code files, raw data, config, logs |
 | `html` | HTML pages, web apps, interactive content |
 
-Use `format="text"` for code files, raw data, or when markdown parsing fails.
+Use `format="text"` for raw file URLs (GitHub raw content, pastebin, etc.).
 
-### 2.3 Handle Large Responses
-
-If response exceeds ~50KB:
-- Use offset/limit parameters if available
-- Fetch specific sections separately
-- Prioritize the information needed
-
-### 2.4 Content Type Detection
+### 1.3 Content Type Reference
 
 | Content Type | Expected Format |
 |---|---|
@@ -81,210 +63,113 @@ If response exceeds ~50KB:
 | Blog posts | `markdown` |
 | Raw config/data files | `text` |
 
-### 2.5 Error Handling
-
-**Retry Strategy:**
-1. First failure: Retry once (network issues are often transient)
-2. Second failure: Try alternative format
-3. Third failure: Report error to user with specific URL and issue
-
-**Common Errors:**
-- `404 Not Found`: URL is wrong or resource moved — verify URL or search for updated location
-- `403 Forbidden`: Access denied — check if authentication needed or if bot is blocked
-- `Connection timeout`: Server is slow or unreachable — retry with longer timeout
-- `Invalid URL`: URL is malformed — validate and correct
-
 ---
 
-## PHASE 3 — Using websearch
+## PHASE 2 — Web Search via webfetch
 
-### 3.1 When to Use websearch
+**websearch is NOT available.** To search the web, use webfetch with a search engine URL.
 
-Use websearch when:
-- **Error resolution**: Getting error messages, debugging issues
-- **How-to questions**: "How do I implement X", "What's the best way to do Y"
-- **Best practices**: Finding recommended approaches
-- **Library research**: Comparing packages, finding alternatives
-- **Version info**: Checking latest versions, compatibility
+### Search Engine URLs
 
-### 3.2 websearch Parameters
-
-| Parameter | Type | Description |
+| Engine | URL Pattern | Format |
 |---|---|---|
-| `query` | string | Search query (required) |
-| `numResults` | number | Number of results (default: 8) |
-| `livecrawl` | string | `"fallback"` (default) or `"preferred"` |
-| `type` | string | `"auto"`, `"fast"`, or `"deep"` |
+| Google (Basic HTML) | `https://www.google.com/search?q=QUERY&gbv=1` | `html` or `text` |
 
-**Live Crawl Modes:**
-- `fallback`: Use cached if available, crawl live if not (default)
-- `preferred`: Always crawl live content
+URL-encode the query. Use Google's basic HTML view (`gbv=1`) — it avoids JS-heavy rendering and is less likely to trigger CAPTCHA than the standard endpoint. Use `format="html"` or `format="text"` (avoid `markdown` for search results pages).
 
-**Search Types:**
-- `auto`: Balanced results (default)
-- `fast`: Quick results for simple queries
-- `deep`: Comprehensive search for complex topics
+**Example — searching for a topic:**
 
-### 3.3 Craft Effective Queries
+```
+User: "Search for python async best practices"
+You: webfetch(url="https://www.google.com/search?q=python+async+best+practices&gbv=1", format="html")
+```
 
-**Good Patterns:**
-- Include technology/libraries: "react hooks custom state management"
-- Include context: "python async vs sync performance"
-- Include version when relevant: "nodejs 20 new features"
-- Be specific: "create-react-app vs vite SSR"
+**Example — searching for error resolution:**
 
-**Avoid:**
-- Too broad: "help with coding"
-- Too vague: "how to fix error"
-- Overly long queries (keep under 50 words)
+```
+User: "How do I fix 'Connection refused' in Node.js?"
+You: webfetch(url="https://www.google.com/search?q=nodejs+connection+refused+fix&gbv=1", format="html")
+```
 
-### 3.4 Process Search Results
+### Search Results Processing
 
-1. Review titles and snippets
-2. Prioritize official documentation, trusted sources
-3. Fetch the most relevant result first
-4. If first result doesn't answer the question, fetch the next most relevant
-
-### 3.5 Handle Multiple Results
-
-- Start with most authoritative source (official docs, established blogs)
-- If results are from forums (Stack Overflow, Reddit), verify with official docs
-- For multiple valid approaches, present options with trade-offs
+1. Fetch search results with webfetch
+2. Review results for relevant links
+3. Fetch the most relevant result with webfetch to get full content
+4. Synthesize findings for the user
 
 ---
 
-## PHASE 4 — Coding-Specific Patterns
+## PHASE 3 — Coding Patterns
 
-### 4.1 API Documentation
+### 3.1 API Documentation
 
-**Steps:**
 1. Identify the library/package
-2. Find official docs URL (usually `https://[package].js.org` or `https://docs.[package].com`)
+2. Find official docs URL (e.g., `https://docs.example.com`)
 3. Use webfetch to get relevant sections
-4. If docs are unclear, use websearch for examples
+4. If docs are unclear, search via search engine URL to find examples
 
-**Examples:**
-- Fetch: `webfetch(url="https://docs.example.com/api/client", format="markdown")`
-- Search: `websearch(query="example api client authentication oauth")`
+### 3.2 Error Resolution
 
-### 4.2 Error Resolution
-
-**When encountering an error:**
 1. Copy exact error message
-2. Search with key terms: `[error-message] [language/framework]`
-3. Prioritize Stack Overflow, GitHub issues, official docs
+2. Fetch with search engine URL: `[error-message] [language/framework]`
+3. Fetch the most relevant result
 4. Verify solution works with your specific version
 
-**Example workflow:**
-```
-Error: "Cannot read property 'map' of undefined"
-1. websearch(query="Cannot read property 'map' of undefined react")
-2. Fetch most relevant result
-3. Apply fix and verify
-```
+### 3.3 Code Examples
 
-### 4.3 Library/Dependency Research
-
-**Before adding a dependency:**
-1. Search for alternatives: `[use-case] npm package alternative`
-2. Check popularity: stars, downloads, maintenance status
-3. Look for examples: `[package] example usage`
-4. Check compatibility: `[package] node version support`
-
-### 4.4 Code Examples
-
-**Finding working examples:**
 1. Search: `[feature] example code [language]`
 2. Prioritize official examples, then reputable tutorials
 3. Verify code is current (not deprecated)
-4. Check for TypeScript/ES6+ syntax if relevant
 
-### 4.5 Version/Compatibility Research
+### 3.4 Version/Compatibility Research
 
-**When version matters:**
 1. Search: `[package] version 3 vs 2 migration guide`
-2. Check changelog for breaking changes
-3. Verify with official docs before upgrading
-4. Look for compatibility notes with your stack
-
-### 4.6 Architecture/Design Patterns
-
-**For best practices:**
-1. Search: `[pattern] best practices [language/framework]`
-2. Check official style guides
-3. Look at popular open-source projects for reference
-4. Verify pattern is not outdated
+2. Fetch changelog or migration guide
+3. Look for compatibility notes with your stack
 
 ---
 
-## PHASE 5 — Error Handling & Edge Cases
+## PHASE 4 — Error Handling
 
-### 5.1 Common Errors and Solutions
+### 4.1 Retry Strategy
 
-| Error | Cause | Solution |
+1. **First failure:** Retry once (network issues are often transient)
+2. **Second failure:** Try alternative format (e.g., `html` instead of `markdown`)
+3. **Third failure:** Report error to user with specific URL and issue
+
+### 4.2 Common Errors
+
+| Error | Likely Cause | Action |
 |---|---|---|
-| 404 Not Found | URL changed, page removed | Search for updated URL |
-| 403 Forbidden | Bot blocked, auth required | Check headers, try websearch instead |
-| Connection Timeout | Server slow/unreachable | Retry, try alternative source |
-| Content Truncated | Response too large | Fetch in sections or use specific URLs |
-| Invalid Format | Wrong format for content | Try different format option |
+| 404 Not Found | URL wrong or moved | Verify URL or search for updated location |
+| 403 Forbidden | Access denied | Check if authentication needed |
+| Connection timeout | Server slow/unreachable | Retry with longer timeout |
+| Invalid URL | Malformed URL | Validate and correct |
+| CAPTCHA / consent page | Google bot detection | Refine query with `site:` filter or more specific terms; retry; or fall back to a known URL |
 
-### 5.2 Edge Cases
+### 4.3 Edge Cases
 
-**Redirects:**
-- Follow redirects automatically (default behavior)
-- If too many redirects, verify URL manually
+**Redirects:** Followed automatically. If too many redirects, verify URL manually.
 
-**Large Pages:**
-- Fetch specific sections rather than entire page
-- Use anchor links to target content
+**Large pages:** Fetch specific sections rather than entire page. Use anchor links.
 
-**Mixed Content:**
-- Some pages block fetch due to CORS
-- Try websearch for cached/similar content
+**Rate limiting:** If getting 429 errors, wait and retry with delay.
 
-**Rate Limiting:**
-- If getting 429 errors, wait and retry
-- Use websearch as alternative
-
-**Authentication Required:**
-- Cannot fetch protected content
-- Use websearch to find public alternatives
+**Authentication required:** Cannot fetch protected content. Inform the user.
 
 ---
 
-## Quick Reference Decision Tree
+## Quick Reference
 
 ```
-START: User needs web content
-│
-├─ Do you know the exact URL?
-│   ├─ YES → Use webfetch
-│   │   │
-│   │   └─ What format?
-│   │       ├─ Docs/Articles → markdown
-│   │       ├─ Code/Raw → text
-│   │       └─ HTML pages → html
-│   │
-│   └─ NO → Use websearch
-│       │
-│       └─ Craft query:
-│           • Include technology
-│           • Be specific
-│           • Under 50 words
-│
-└─ Processing results:
-    • Prioritize official docs
-    • Start with most relevant
-    • Verify with multiple sources if needed
+Fetch URL → webfetch(url, format)
+Search web → webfetch(https://www.google.com/search?q=QUERY&gbv=1, format)
+  Format: html or text (avoid markdown for search results)
 ```
 
----
+**Format defaults:** docs → markdown, code → text, HTML → html
 
-## Summary
+**On error:** retry → try different format → report to user
 
-1. **Know the URL?** → webfetch | **Don't know?** → websearch
-2. **webfetch**: Use correct format (markdown/text/html), handle large content, retry on failure
-3. **websearch**: Craft good queries, process results strategically, verify with authoritative sources
-4. **Coding tasks**: Focus on API docs, error resolution, library research, code examples
-5. **Handle errors**: Retry, try alternatives, report clearly when stuck
+**No websearch tool exists.** Always use webfetch with search engine URLs.

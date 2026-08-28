@@ -1,0 +1,1 @@
+Read the file at C:\Users\Syeds\.config\opencode\skills\document-reader\tests\fixtures\api-doc-large.md and list every distinct piece of information an engineer needs to build a working API client against it. Be exhaustive.

@@ -1,0 +1,1 @@
+Read C:\Users\Syeds\.config\opencode\skills\document-reader\tests\fixtures\api-doc-large.md and produce: (1) the auth scheme and how credentials are supplied, (2) every documented error code with its meaning, (3) rate limit behavior. Then write a minimal TypeScript fetch wrapper function for POST /v1/charges.
