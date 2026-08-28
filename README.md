@@ -1,34 +1,39 @@
 # 🚀 Personal Agent Skills
 
-> A comprehensive collection of specialized **AI agent skills** designed to enhance coding workflows, accelerate research, and improve code quality. Each skill is a tested, production-ready workflow that tackles specific challenges in software development.
+> A collection of specialized **AI agent skills** — tested, production-ready workflows for code analysis, research, implementation review, and content generation. Each skill is a self-contained `SKILL.md` plus optional tests and evaluation data.
 
 ---
 
 ## 📋 Table of Contents
 
-- [Overview](#overview)
-- [Skills Directory](#skills-directory)
-- [Getting Started](#getting-started)
-- [Skill Categories](#skill-categories)
-- [Contributing](#contributing)
+- [Overview](#-overview)
+- [Skills Directory](#-skills-directory)
+- [Getting Started](#-getting-started)
+- [Skill Categories](#-skill-categories)
+- [Repository Structure](#-repository-structure)
+- [How Skills Work](#-how-skills-work)
+- [Quality Assurance](#-quality-assurance)
+- [Contributing](#-contributing)
+- [Quick Links](#-quick-links)
 
 ---
 
 ## 🎯 Overview
 
-This repository contains **11 specialized skills** that extend AI agent capabilities across multiple domains:
+This repository contains **12 specialized skills** that extend AI agent capabilities across multiple domains:
 
 - **Code Analysis** — Search, review, and understand existing codebases
-- **Research & Learning** — Efficiently gather information from web, docs, and repositories
+- **Research & Learning** — Efficiently gather information from web, docs, and GitHub
 - **Implementation Workflows** — Structured processes for requirements gathering, implementation, and review
-- **Technical Integration** — API documentation handling and specialized domain knowledge (CoinDCX Futures)
+- **Document & Content** — Read docs systematically and turn papers into explainers
+- **Skill Maintenance** — Safely edit existing skills without breaking tested behavior
+- **Domain-Specific Knowledge** — Specialized API knowledge (CoinDCX Futures)
 
 Each skill includes:
-- ✅ Clear trigger conditions and use cases
+- ✅ A YAML frontmatter `description` defining precise trigger conditions
 - ✅ Step-by-step workflow phases
-- ✅ Real-world examples and patterns
-- ✅ Red flag warnings and gotchas
-- ✅ Test scenarios and evaluation data
+- ✅ Red flag warnings and common-mistake tables
+- ✅ Test scenarios and evaluation data where applicable
 
 ---
 
@@ -36,34 +41,40 @@ Each skill includes:
 
 ### Code Analysis & Understanding
 
-| Skill | Purpose | Key Features |
-|-------|---------|--------------|
-| **[Codebase Search Funnel](codebase-search-funnel/)** | Find code elements efficiently in any codebase | 5-phase search workflow, pattern detection, cross-referencing |
-| **[Finding Dead Code](finding-dead-code/)** | Identify and remove unused code | Automated tool integration, false-positive filtering, technical debt analysis |
-| **[Code Review](code-review/)** | Perform focused, in-depth code reviews | Structured evaluation, severity-based feedback, context-aware assessment |
+| Skill | Purpose |
+|-------|---------|
+| **[Codebase Search Funnel](codebase-search-funnel/SKILL.md)** | Find code elements (definitions, usages, patterns, config) efficiently in any codebase using a 5-phase funnel that prevents missed results and noise. |
+| **[Finding Dead Code](finding-dead-code/SKILL.md)** | Detect, score, and safely remove unused code in Python, JS/TS, and HTML (including embedded code) using `pyflakes`, `vulture`, `eslint`, etc. |
+| **[Code Review](code-review/SKILL.md)** | Perform focused code reviews with structured 6-dimension feedback (correctness, security, performance, etc.) on shared snippets or PR diffs. |
 
 ### Research & Information Gathering
 
-| Skill | Purpose | Key Features |
-|-------|---------|--------------|
-| **[Research Funnel](research-funnel/)** | Conduct deep, multi-source research | Iterative deepening methodology, stop rules, source verification |
-| **[Web Fetching](web-fetching/)** | Retrieve web content reliably | URL validation, tool selection (webfetch vs websearch), documentation retrieval |
-| **[GitHub Finder](github-finder/)** | Search GitHub comprehensively | Tiered search routing, multi-mode detection, code/repo/issue/user searches |
-| **[Document Reader](document-reader/)** | Extract knowledge from documentation | Size-aware reading strategies, schema extraction, coverage guarantees |
+| Skill | Purpose |
+|-------|---------|
+| **[Research Funnel](research-funnel/SKILL.md)** | Conduct deep, multi-source research using iterative deepening with a strict stop rule (2+ independent sources + diminishing returns). |
+| **[Web Fetching](web-fetching/SKILL.md)** | Retrieve web content reliably via `webfetch` and perform web searches using search-engine URLs (since `websearch` is not available). |
+| **[GitHub Finder](github-finder/SKILL.md)** | Search GitHub (repos, code, issues, users, topics) with tiered fallback: `gh` CLI → REST API → web search. |
+| **[Document Reader](document-reader/SKILL.md)** | Read documentation files completely to extract endpoints, schemas, auth, and error codes — never summarize from a partial read. |
 
 ### Implementation & Review Workflows
 
-| Skill | Purpose | Key Features |
-|-------|---------|--------------|
-| **[Requirements Gathering](requirements-gathering/)** | Clarify project needs systematically | One-at-a-time questioning, 8-category framework, synthesis & confirmation |
-| **[Reviewing Implementation](reviewing-implementation/)** | Verify code matches specifications | Plan compliance checking, task verification, scope validation |
-| **[Modifying Skills](modifying-skills/)** | Edit existing skills safely | Regression testing, YAML safety, change inventory tracking |
+| Skill | Purpose |
+|-------|---------|
+| **[Requirements Gathering](requirements-gathering/SKILL.md)** | Clarify project needs through one-at-a-time questioning across 8 categories, then synthesize and confirm before implementation. |
+| **[Reviewing Implementation](reviewing-implementation/SKILL.md)** | Verify a code change correctly implements all tasks and acceptance criteria from a plan, using a fresh subagent to avoid bias. |
+| **[Modifying Skills](modifying-skills/SKILL.md)** | Edit existing skills safely using READ → INVENTORY → CHANGE → REGRESS → VERIFY — never break tested behavior. |
+
+### Document & Content Workflows
+
+| Skill | Purpose |
+|-------|---------|
+| **[Paper to Explainer](paper-to-explainer/SKILL.md)** | Turn any research paper (PDF, URL, or arXiv ID) into a structured markdown explainer with LaTeX equations, then convert to DOCX. |
 
 ### Domain-Specific Knowledge
 
-| Skill | Purpose | Key Features |
-|-------|---------|--------------|
-| **[CoinDCX Futures API](coindcx-api/)** | Perpetual futures trading via CoinDCX | REST endpoints, WebSocket connections, HMAC authentication, order management |
+| Skill | Purpose |
+|-------|---------|
+| **[CoinDCX Futures API](coindcx-api/SKILL.md)** | Perpetual futures trading via CoinDCX — REST endpoints, WebSocket connections, HMAC authentication, order management. |
 
 ---
 
@@ -71,32 +82,42 @@ Each skill includes:
 
 ### Using a Skill
 
-1. **Identify the right skill** — Match your task to the skill descriptions above
-2. **Read the SKILL.md** — Each folder contains detailed documentation
-3. **Follow the workflow** — Skills are organized into numbered phases
+1. **Identify the right skill** — Match your task to the skill descriptions and frontmatter `description:` blocks above
+2. **Read the SKILL.md** — Each folder contains the full workflow
+3. **Follow the phases** — Skills are organized into numbered steps
 4. **Reference examples** — Most skills include concrete examples and templates
 
 ### Example Workflows
 
 **Finding unused code in a Python project:**
 ```bash
-# Navigate to your project, then trigger the "Finding Dead Code" skill
-# It will run: python -m pyflakes . && vulture .
-# Then guide you through filtering, scoring, and safe removal
+# Trigger the "Finding Dead Code" skill
+# Phase 1: Run python -m pyflakes . && vulture .
+# Phase 2-4: Cross-reference, filter false positives, score confidence
+# Phase 6: Safe removal with git stash backup and dry-run
 ```
 
 **Researching a new technology:**
 ```bash
 # Use the "Research Funnel" skill
-# It enforces iterative deepening across multiple sources
-# Ensures you have evidence-based answers, not surface-level knowledge
+# Phase 1: Frame the question precisely
+# Phase 2-3: Explore 5+ sources from 3+ angles, then deepen
+# Stop rule: 2+ independent sources AND diminishing returns
 ```
 
-**Understanding a complex codebase:**
+**Verifying an implementation matches its plan:**
 ```bash
-# Use the "Codebase Search Funnel" skill
-# Search for definitions, usages, patterns, and configurations
-# Get structured, contextual results without noise
+# Use the "Reviewing Implementation" skill
+# Provide plan path + BASE_SHA + HEAD_SHA
+# A fresh subagent checks every plan task and acceptance criterion
+```
+
+**Turning a research paper into an explainer:**
+```bash
+# Use the "Paper to Explainer" skill
+python skills/paper-to-explainer/extract_pdf.py "paper.pdf"          # extract text
+# Edit the generated explainer in your preferred markdown editor
+python skills/paper-to-explainer/convert_to_docx.py --input paper.md  # produce .docx
 ```
 
 ---
@@ -119,6 +140,11 @@ Each skill includes:
 **📋 For Project Management:**
 - Requirements Gathering
 - Reviewing Implementation
+- Modifying Skills
+
+**📄 For Content / Knowledge Work:**
+- Paper to Explainer
+- Document Reader
 
 **💼 For API Integration:**
 - CoinDCX Futures API
@@ -131,16 +157,18 @@ Each skill includes:
 - CoinDCX Futures API
 - Finding Dead Code (detection phase)
 
-**Medium Workflow** (15-30 minutes):
+**Medium Workflow** (15–30 minutes):
 - Code Review
 - Codebase Search Funnel
 - Document Reader
+- Paper to Explainer (after extraction)
+- Modifying Skills (single edit)
 
 **Deep Process** (45+ minutes):
 - Research Funnel
 - Requirements Gathering
 - Reviewing Implementation
-- Modifying Skills
+- Paper to Explainer (full paper)
 
 ---
 
@@ -148,93 +176,92 @@ Each skill includes:
 
 ```
 .
-├── README.md                          # This file
-├── codebase-search-funnel/
-│   ├── SKILL.md                      # Core skill documentation
-│   └── tests/                        # Test scenarios and baselines
+├── README.md                                # This file
+│
 ├── code-review/
-│   └── SKILL.md
-├── research-funnel/
-│   └── SKILL.md
-├── web-fetching/
-│   └── SKILL.md
-├── github-finder/
 │   ├── SKILL.md
-│   └── evals/                        # Evaluation data
-├── document-reader/
-│   └── SKILL.md
-├── requirements-gathering/
-│   ├── SKILL.md
-│   ├── baseline-observed.md          # Reference observations
 │   └── test-scenarios.md
-├── reviewing-implementation/
+│
+├── codebase-search-funnel/
 │   ├── SKILL.md
-│   ├── reviewer-prompt.md            # Template for implementation review
-│   └── evals/                        # Evaluation data
+│   └── tests/                               # Baseline + embedded-scenario tests
+│
 ├── finding-dead-code/
 │   └── SKILL.md
+│
+├── github-finder/
+│   ├── SKILL.md
+│   └── evals/                               # Evaluation data
+│
+├── document-reader/
+│   ├── SKILL.md
+│   └── tests/                               # Baselines, green, scenario coverage, fixtures
+│
+├── requirements-gathering/
+│   ├── SKILL.md
+│   ├── baseline-observed.md                 # Reference observations
+│   └── test-scenarios.md
+│
+├── reviewing-implementation/
+│   ├── SKILL.md
+│   ├── reviewer-prompt.md                   # Template for subagent review
+│   └── evals/                               # Evaluation data
+│
 ├── modifying-skills/
 │   ├── SKILL.md
 │   └── test-scenarios.md
+│
+├── paper-to-explainer/
+│   ├── SKILL.md
+│   ├── extract_pdf.py                       # PDF → text extraction
+│   └── convert_to_docx.py                   # Markdown → Word .docx
+│
+├── research-funnel/
+│   └── SKILL.md
+│
+├── web-fetching/
+│   ├── SKILL.md
+│   └── test-scenarios.md
+│
 └── coindcx-api/
     ├── SKILL.md
-    └── references/                   # API endpoint documentation
+    └── references/                          # API endpoint documentation
 ```
 
 ---
 
 ## 🎓 How Skills Work
 
-Each skill is designed around a **workflow phase model**:
+Each skill is designed around a **frontmatter-driven trigger model**:
 
-1. **Trigger** — When should you use this skill?
+1. **Trigger** — YAML `description:` block defines precise conditions for when the skill fires
 2. **Phases** — Step-by-step process to complete the task
-3. **Tools & Patterns** — Specific techniques and commands
-4. **Red Flags** — Warnings about common mistakes
-5. **Examples** — Real-world scenarios
+3. **Tools & Patterns** — Specific techniques, commands, and templates
+4. **Red Flags** — Warnings about common rationalizations that lead to failure
+5. **Examples** — Real-world scenarios and worked walkthroughs
 
-### Example Workflow: Codebase Search Funnel
+### Example: Codebase Search Funnel
 
 ```
-Phase 0: Frame       → Define what kind of search (definition, usage, pattern)
-Phase 1: Scope       → Narrow search space (files, folders, languages)
-Phase 2: Execute     → Run appropriate tool (grep, LSP, file search)
+Phase 0: Frame       → Identify search type (definition, usage, pattern, config, file, embedded)
+Phase 1: Scope       → Narrow dirs, file types, include/exclude tests
+Phase 2: Execute     → Pick tool (glob, rg/grep, task) and use context flags
 Phase 3: Filter      → Remove noise and false positives
-Phase 4: Context     → Include surrounding code for understanding
+Phase 4: Context     → Include surrounding code (-C 3 to -C 5)
 Phase 5: Verify      → Confirm results match the original intent
 ```
-
----
-
-## 🛠️ Technical Stack
-
-- **Language Support:** Python, JavaScript/TypeScript, HTML, General Web Content
-- **Tools:** ESLint, Pyflakes, Vulture, GitHub CLI, GitHub REST API, git
-- **Patterns:** Phase-based workflows, iterative refinement, evidence-based verification
-- **Integration:** Ready for LLM agents, VS Code extensions, CI/CD pipelines
-
----
-
-## 📖 Documentation
-
-Each skill folder contains:
-
-- **SKILL.md** — Complete skill documentation with phases, examples, and red flags
-- **test-scenarios.md** — Test cases to validate the skill works correctly
-- **evals/** — Evaluation data and scoring rubrics
-- **references/** — Domain-specific documentation (for API skills)
 
 ---
 
 ## ✅ Quality Assurance
 
 Skills in this repo have been:
-- ✅ Tested with multiple scenarios
-- ✅ Evaluated for effectiveness
-- ✅ Documented with edge cases
-- ✅ Optimized for clarity and usability
+- ✅ Tested with multiple scenarios (see `tests/`, `test-scenarios.md`, `evals/`)
+- ✅ Evaluated for effectiveness against baselines
+- ✅ Documented with red-flag warnings for common rationalizations
+- ✅ Structured around phase-based workflows
 
-Each skill includes test data to verify it works as intended. Before modifying a skill, always run the regression tests.
+Before modifying any skill, run the [Modifying Skills](modifying-skills/SKILL.md) workflow — it enforces regression testing of existing behavior.
 
 ---
 
@@ -253,33 +280,33 @@ Each skill includes test data to verify it works as intended. Before modifying a
    ```
 3. Structure with phases, examples, and red flags
 4. Add test scenarios: `test-scenarios.md`
-5. Include reference docs if applicable
+5. Include reference docs or evaluation data if applicable
 6. Submit via pull request
 
 ### Modifying Existing Skills
 
-Use the **Modifying Skills** skill! It ensures:
+Use the [Modifying Skills](modifying-skills/SKILL.md) skill. It enforces:
 - Regression testing of existing behavior
-- YAML frontmatter safety
+- YAML frontmatter safety (the `description:` controls trigger conditions)
 - Change inventory tracking
 - No breaking changes to tested workflows
 
 ---
 
-## 📝 License
+## 🔗 Quick Links
 
-These skills are open-source and available for use in AI agent development, educational projects, and software engineering workflows.
-
----
-
-## 🎯 Quick Links
-
-- **Need help finding code?** → [Codebase Search Funnel](codebase-search-funnel/SKILL.md)
-- **Want to review code?** → [Code Review](code-review/SKILL.md)
-- **Researching a technology?** → [Research Funnel](research-funnel/SKILL.md)
+- **Finding code?** → [Codebase Search Funnel](codebase-search-funnel/SKILL.md)
+- **Removing unused code?** → [Finding Dead Code](finding-dead-code/SKILL.md)
+- **Reviewing a snippet?** → [Code Review](code-review/SKILL.md)
+- **Verifying work matches a plan?** → [Reviewing Implementation](reviewing-implementation/SKILL.md)
 - **Gathering requirements?** → [Requirements Gathering](requirements-gathering/SKILL.md)
-- **Verifying implementation?** → [Reviewing Implementation](reviewing-implementation/SKILL.md)
-- **Working with APIs?** → [Document Reader](document-reader/SKILL.md) or [CoinDCX Futures API](coindcx-api/SKILL.md)
+- **Researching a topic?** → [Research Funnel](research-funnel/SKILL.md)
+- **Fetching a URL or searching the web?** → [Web Fetching](web-fetching/SKILL.md)
+- **Searching GitHub?** → [GitHub Finder](github-finder/SKILL.md)
+- **Reading API docs?** → [Document Reader](document-reader/SKILL.md)
+- **Explaining a research paper?** → [Paper to Explainer](paper-to-explainer/SKILL.md)
+- **Editing another skill?** → [Modifying Skills](modifying-skills/SKILL.md)
+- **Working with CoinDCX Futures?** → [CoinDCX API](coindcx-api/SKILL.md)
 
 ---
 
